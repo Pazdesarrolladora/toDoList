@@ -66,16 +66,17 @@ function App() {
         justifyContent: "center",
         alignItems: "center",
         padding: "50px",
+        height: "100vh",
       }}
     >
       <Grid
         container
+        component={Box}
         sx={{
           backgroundColor: "rgba(255, 255, 255, 0.5)",
           border: "2px solid white",
           borderRadius: "15px",
-          maxWidth: "40%",
-          margin: "0 auto",
+          maxWidth: "80%",
           padding: "50px",
         }}
         justifyContent="center"
@@ -89,61 +90,56 @@ function App() {
             </Typography>
           </Grid>
         </ThemeProvider>
-        <Grid item>
-          <Grid container justifyContent="center" spacing={2}>
-            <Grid item>
-              <TextField
-                label="Add Task"
-                value={inputValue}
-                onChange={handleInputChange}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    addTask();
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <List>
-                {tasks.length === 0 ? (
-                  <ListItem>
-                    <ListItemText primary="No hay tareas, añadir tareas" />
-                  </ListItem>
-                ) : (
-                  tasks.map((task, index) => (
-                    <ListItem
-                      key={index}
-                      style={{
-                        textDecoration: task.completed ? "line-through" : "none",
-                      }}
+        <Grid item xs={12} sm={8} md={6}>
+          <TextField
+            label="Add Task"
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                addTask();
+              }
+            }}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <List>
+            {tasks.length === 0 ? (
+              <ListItem>
+                <ListItemText primary="No hay tareas, añadir tareas" />
+              </ListItem>
+            ) : (
+              tasks.map((task, index) => (
+                <ListItem
+                  key={index}
+                  style={{
+                    textDecoration: task.completed ? "line-through" : "none",
+                  }}
+                >
+                  <ListItemText
+                    primary={task.text}
+                    secondary={task.date.toDateString()}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton onClick={() => toggleComplete(index)}>
+                      <TaskAltIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() =>
+                        editTask(index, prompt("Edit Task", task.text))
+                      }
                     >
-                      <ListItemText
-                        primary={task.text}
-                        secondary={task.date.toDateString()}
-                      />
-                      {task.isActive && (
-                        <ListItemSecondaryAction>
-                          <IconButton onClick={() => toggleComplete(index)}>
-                            <TaskAltIcon />
-                          </IconButton>
-                          <IconButton
-                            onClick={() =>
-                              editTask(index, prompt("Edit Task", task.text))
-                            }
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton onClick={() => deleteTask(index)}>
-                            <DeleteIcon />
-                          </IconButton>
-                        </ListItemSecondaryAction>
-                      )}
-                    </ListItem>
-                  ))
-                )}
-              </List>
-            </Grid>
-          </Grid>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => deleteTask(index)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))
+            )}
+          </List>
         </Grid>
       </Grid>
     </Box>
